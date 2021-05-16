@@ -142,13 +142,13 @@
     </snapshotRepository>
   </distributionManagement>
   <properties>
-    <federate.name>Reader</federate.name>
-    <nar.version>3.3.0</nar.version>
-    <configFile>Reader.json</configFile>
-    <federation.name>EPMultipleSims_v4_2</federation.name>
-    <package.name>org.webgme.guest.reader</package.name>
-    <cpswt.version>0.6.0-SNAPSHOT</cpswt.version>
     <federation.version>0.1.0-SNAPSHOT</federation.version>
+    <federation.name>EPMultipleSims_v4_2</federation.name>
+    <cpswt.version>0.6.0-SNAPSHOT</cpswt.version>
+    <package.name>org.webgme.guest.reader</package.name>
+    <federate.name>Reader</federate.name>
+    <configFile>Reader.json</configFile>
+    <nar.version>3.3.0</nar.version>
   </properties>
 </project>
 
