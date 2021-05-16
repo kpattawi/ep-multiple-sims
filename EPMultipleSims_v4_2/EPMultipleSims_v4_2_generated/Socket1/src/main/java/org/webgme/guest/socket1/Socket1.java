@@ -1,6 +1,6 @@
-package org.webgme.guest.socket;
+package org.webgme.guest.socket1;
 
-import org.webgme.guest.socket.rti.*;
+import org.webgme.guest.socket1.rti.*;
 
 import org.cpswt.config.FederateConfig;
 import org.cpswt.config.FederateConfigParser;
@@ -92,7 +92,7 @@ public class Socket1 extends Socket1Base {
         // Kaleb // Add socket here: 
         InetAddress addr = InetAddress.getByName(ipAdd);  // the address needs to be changed in config.txt
         // ServerSocket welcomeSocket = new ServerSocket(portNo, 50, addr);  // NEED TO REDO PORT NUMber config for multiple sockets
-        ServerSocket welcomeSocket = new ServerSocket(6789, 50, addr);  // Can also be changed in config.txt
+        ServerSocket welcomeSocket = new ServerSocket(6790, 50, addr);  // Can also be changed in config.txt
         java.net.Socket connectionSocket = welcomeSocket.accept(); // initial connection will be made at this point
         System.out.println("connection successful");
         log.info("connection successful");

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <copy todir="/home/kaleb/Desktop/ep_multiple_sims/EPMultipleSims_v4_2/EPMultipleSims_v4_2_generated/Socket1/target/conf" overwrite="true">
+    <fileset dir="/home/kaleb/Desktop/ep_multiple_sims/EPMultipleSims_v4_2/EPMultipleSims_v4_2_generated/Socket1/conf"/>
+  </copy>
+  <copy todir="/home/kaleb/Desktop/ep_multiple_sims/EPMultipleSims_v4_2/EPMultipleSims_v4_2_generated/Socket1/target" overwrite="true">
+    <fileset file="/home/kaleb/Desktop/ep_multiple_sims/EPMultipleSims_v4_2/EPMultipleSims_v4_2_generated/Socket1/RTI.rid"/>
+  </copy>
+</target>
+</project>

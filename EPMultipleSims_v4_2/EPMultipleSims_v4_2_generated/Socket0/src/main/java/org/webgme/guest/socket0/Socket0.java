@@ -1,6 +1,6 @@
-package org.webgme.guest.socket;
+package org.webgme.guest.socket0;
 
-import org.webgme.guest.socket.rti.*;
+import org.webgme.guest.socket0.rti.*;
 
 import org.cpswt.config.FederateConfig;
 import org.cpswt.config.FederateConfigParser;
