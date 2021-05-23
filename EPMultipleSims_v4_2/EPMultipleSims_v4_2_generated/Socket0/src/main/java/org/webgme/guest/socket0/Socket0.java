@@ -68,7 +68,7 @@ public class Socket0 extends Socket0Base {
         
         // Read IP address and Port number from config.txt 
         log.info("create bufferedReader");
-        File file= new File("/home/vagrant/Desktop/GitHub/scu_research/ucef_projects/EPMultipleSims_v4/EPMultipleSims_v4_generated/config.txt");
+        File file= new File("/home/kaleb/Desktop/ep_multiple_sims/EPMultipleSims_v4_2/EPMultipleSims_v4_2_generated/config.txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
         log.info("bufferedreader successful");
         String st = "";

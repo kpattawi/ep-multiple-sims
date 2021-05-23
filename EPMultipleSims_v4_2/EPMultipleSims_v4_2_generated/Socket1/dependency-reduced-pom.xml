@@ -142,13 +142,13 @@
     </snapshotRepository>
   </distributionManagement>
   <properties>
-    <federation.version>0.1.0-SNAPSHOT</federation.version>
-    <federation.name>EPMultipleSims_v4_2</federation.name>
-    <cpswt.version>0.6.0-SNAPSHOT</cpswt.version>
-    <package.name>org.webgme.guest.socket1</package.name>
     <federate.name>Socket1</federate.name>
-    <configFile>Socket1.json</configFile>
     <nar.version>3.3.0</nar.version>
+    <configFile>Socket1.json</configFile>
+    <federation.name>EPMultipleSims_v4_2</federation.name>
+    <package.name>org.webgme.guest.socket1</package.name>
+    <cpswt.version>0.6.0-SNAPSHOT</cpswt.version>
+    <federation.version>0.1.0-SNAPSHOT</federation.version>
   </properties>
 </project>
 

@@ -371,6 +371,10 @@ public class Controller extends ControllerBase {
               }
             }
             // End Adaptive Setpoint Control
+            
+            // Fixed Setpoint
+            heatTemps[i] = 20.5;
+            coolTemps[i] = 30;
 
             // 0.5 degree fuzzy control (this oscillates indoor temp)
             double OFFSET = 0.6; // need to change slightly higher/lower so E+ doesnt have issues

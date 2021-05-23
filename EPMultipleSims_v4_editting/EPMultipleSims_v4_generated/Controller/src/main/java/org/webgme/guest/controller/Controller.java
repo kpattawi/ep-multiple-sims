@@ -301,7 +301,7 @@ public class Controller extends ControllerBase {
                 try{
                     // Create new file
                     // Need to change the path below to the GENERATED Folder
-                    String path="/home/vagrant/Desktop/GitHub/scu_research/ucef_projects/EPMultipleSims_v4/EPMultipleSims_v4_generated/DataSummary.txt";
+                    String path="/home/kaleb/Desktop/ep_multiple_sims//EPMultipleSims_v4_editting/EPMultipleSims_v4_generated/DataSummary.txt";
                     File file = new File(path);
     
                     // If file doesn't exists, then create it
@@ -438,7 +438,7 @@ public class Controller extends ControllerBase {
             try{
                 // Create new file
                 // Change to deployment folder
-                String path="/home/vagrant/Desktop/GitHub/scu_research/ucef_projects/EPMultipleSims_v4/EPMultipleSims_v4_deployment/DataSummary.txt";
+                String path="/home/kaleb/Desktop/ep_multiple_sims//EPMultipleSims_v4_editting/EPMultipleSims_v4_deployment/DataSummary.txt";
                 File file = new File(path);
 
                 // If file doesn't exists, then create it
