@@ -372,7 +372,7 @@ public class Controller extends ControllerBase {
             // 0.5 degree fuzzy control (this oscillates indoor temp)
             double max_cool_temp = 30.2; 
             double min_heat_temp = 18.9; 
-            double OFFSET = 0.6; // need to change slightly higher/lower so E+ doesnt have issues
+            double OFFSET = 0.5; // need to change slightly higher/lower so E+ doesnt have issues
 
             // Determine minimum and maximum temperatures allowed (we can probably print this from optimization code too)
             if (outTemps[i]<=10){
