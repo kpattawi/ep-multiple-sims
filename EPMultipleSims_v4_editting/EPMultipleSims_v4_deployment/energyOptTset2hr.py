@@ -157,7 +157,6 @@ b = matrix(0.0, (n*2,1))
 if occupancy_mode == True:
 	comfort_range_cool = adaptive_cooling_100[(block-1)*12:(block-1)*12+n,0] + occupancy_range[(block-1)*12:(block-1)*12+n,0]
 	comfort_range_heat = adaptive_heating_100[(block-1)*12:(block-1)*12+n,0] - occupancy_range[(block-1)*12:(block-1)*12+n,0]
-	print('OCCUPANCY MODE ON')
 	k = 0
 	while k<n:
 		b[2*k,0]=comfort_range_cool[k,0]-S[k,0]

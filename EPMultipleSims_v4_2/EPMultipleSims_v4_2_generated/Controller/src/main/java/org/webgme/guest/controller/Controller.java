@@ -370,6 +370,10 @@ public class Controller extends ControllerBase {
                 coolTemps[i] = 0.31*outTemps[i] + 17.8+2;
               }
             }
+            if (i==1){
+              heatTemps[i]=20.5;
+              coolTemps[i]=30;
+            }
             // End Adaptive Setpoint Control
 
             // 0.5 degree fuzzy control (this oscillates indoor temp)

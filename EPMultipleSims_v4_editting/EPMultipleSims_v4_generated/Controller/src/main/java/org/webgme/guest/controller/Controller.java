@@ -353,21 +353,21 @@ public class Controller extends ControllerBase {
 
             // ---------------------------------------------------- end optimization code
 
-            // Adaptive Setpoint Control:
-            boolean adaptiveSetpoint_mode = false;
-            if (adaptiveSetpoint_mode){
-              if (outTemps[i]<=10){
-                heatTemps[i]=18.9;
-                coolTemps[i]=22.9;
-              }else if (outTemps[i]>=33.5){
-                heatTemps[i]=26.2;
-                coolTemps[i]=30.2;
-              }else {
-                heatTemps[i] = 0.31*outTemps[i] + 17.8-2;
-                coolTemps[i] = 0.31*outTemps[i] + 17.8+2;
-              }
-            }
-            // End Adaptive Setpoint Control
+            // // Adaptive Setpoint Control:
+            // boolean adaptiveSetpoint_mode = false;
+            // if (adaptiveSetpoint_mode){
+            //   if (outTemps[i]<=10){
+            //     heatTemps[i]=18.9;
+            //     coolTemps[i]=22.9;
+            //   }else if (outTemps[i]>=33.5){
+            //     heatTemps[i]=26.2;
+            //     coolTemps[i]=30.2;
+            //   }else {
+            //     heatTemps[i] = 0.31*outTemps[i] + 17.8-2;
+            //     coolTemps[i] = 0.31*outTemps[i] + 17.8+2;
+            //   }
+            // }
+            // // End Adaptive Setpoint Control
 
             // 0.5 degree fuzzy control (this oscillates indoor temp)
             double max_cool_temp = 30.2; 
