@@ -1,5 +1,4 @@
-# energyOptTset
-
+# energyOptTset ... expanding on energyOpt1 by solving for Tset
 from cvxopt import matrix, solvers
 from cvxopt.modeling import op, dot, variable
 import time
@@ -9,9 +8,7 @@ import sys
 
 # Parameters for one week long simulation with 2hr horizon --------------------------------------------
 heatorcool = 'heat'
-n=24 # number of timesteps within prediction windows (24 x 5-min timesteps in 2 hr window)
-comfortZone_upper = 24.0
-comfortZone_lower = 20.0
+n=24	# 2hrs of timesteps
 timestep = 5*60
 days = 7
 totaltimesteps = days*12*24+3*12 
@@ -19,6 +16,7 @@ pricingmultfactor = 4.0
 pricingoffset = 0.10
 
 occupancy_mode = True
+
 # Max and min for heating and cooling in adaptive setpoint control
 heatTempMax = 26.2
 heatTempMin = 18.9
@@ -35,12 +33,13 @@ c3 = 3.58*10**-7
 
 # get inputs from UCEF --------------------------------------------
 day = int(sys.argv[1])
-block = int(sys.argv[2]) +1+(day-1)*24 # block goes 0:23 (represents the hour within a day)
+block = int(sys.argv[2]) +1+(day-1)*24 # block goes 0:23
 temp_indoor_initial = float(sys.argv[3])
+
 
 # Get data from excel/csv files --------------------------------------------
 # Get outdoor temps
-df = pd.read_excel('OutdoorTemp.xlsx', sheet_name='Feb12thru19',header=0)
+df = pd.read_excel('OutdoorTemp.xlsx', sheet_name='Jan1',header=0)
 # print(df.head())
 temp_outdoor_all=matrix(df.to_numpy())
 df.columns = ['column1']
@@ -84,14 +83,14 @@ occupancy = matrix(occupancy_df['Occupancy'].to_numpy())
 occupancy_range = matrix(occupancy_df['Comfort Range'].to_numpy())
 
 # get solar radiation
-df = pd.read_excel('Solar.xlsx', sheet_name='Feb12thru19')
+df = pd.read_excel('Solar.xlsx', sheet_name='Jan1')
 q_solar_all=matrix(df.to_numpy())
 
 # get wholesale prices
-df = pd.read_excel('WholesalePrice.xlsx', sheet_name='Feb12thru19')
+df = pd.read_excel('WholesalePrice.xlsx', sheet_name='Jan1thru7')
 wholesaleprice_all=matrix(df.to_numpy())
 
-# c matrix is hourly cost per kWh of energy (I think this can be deleted)
+# c matrix is hourly cost per kWh of energy
 Output = matrix(0.00, (totaltimesteps,2))
 cost =0
 c = matrix(0.20, (totaltimesteps,1))
@@ -115,21 +114,20 @@ while k<n:
 		AA[j+1,k] = AA[j-1,k]*-timestep*c1+ AA[j-1,k]
 		j+=2
 	k=k+1
-
 ## Added 12/11
-# making sure energy is positive for heating
 heat_positive = matrix(0.0, (n,n))
 i = 0
 while i<n:
 	heat_positive[i,i] = -1.0 # setting boundary condition: Energy used at each timestep must be greater than 0
 	i +=1
-# making sure energy is negative for cooling
+# making sure energy is positive for heating
 cool_negative = matrix(0.0, (n,n))
 i = 0
 while i<n:
 	cool_negative[i,i] = 1.0 # setting boundary condition: Energy used at each timestep must be less than 0
 	i +=1
 
+# making sure energy is negative for cooling
 d = matrix(0.0, (n,1))
 # inequality constraints
 heatineq = (heat_positive*x<=d)
@@ -138,13 +136,13 @@ energyLimit = matrix(0.25, (n,1)) # .4 before
 heatlimiteq = (cool_negative*x<=energyLimit)
 
 # creating S matrix to make b matrix simpler
-temp_outdoor= temp_outdoor_all[(block-1)*12:(block-1)*12+n,0] # getting next two hours of data
+temp_outdoor= temp_outdoor_all[(block-1)*12:(block-1)*12+n,0]  # getting next two hours of data
 q_solar=q_solar_all[(block-1)*12:(block-1)*12+n,0]
 
 # get price for next two hours
 cc=wholesaleprice_all[(block-1)*12:(block-1)*12+n,0]*pricingmultfactor/1000+pricingoffset
 # cc = c[(block-1)*12:(block-1)*12+n,0]
-S = matrix(0.0, (n,1))
+S = matrix(0.0, (n,1))	# right hand side of indoor temperature constraint equation
 S[0,0] = timestep*(c1*(temp_outdoor[0]-temp_indoor_initial)+c3*q_solar[0])+temp_indoor_initial
 
 i=1
@@ -156,15 +154,6 @@ while i<n:
 # b matrix is constant term in constaint equations
 b = matrix(0.0, (n*2,1))
 
-# k = 0
-# while k<n:
-# 	b[2*k,0]=comfortZone_upper-S[k,0]
-# 	b[2*k+1,0]=-comfortZone_lower+S[k,0]
-# 	k=k+1
-
-adaptiveHeat = adaptive_heating_setpoints[(block-1)*12:(block-1)*12+n,0]
-adaptiveCool = adaptive_cooling_setpoints[(block-1)*12:(block-1)*12+n,0]
-
 if occupancy_mode == True:
 	comfort_range_cool = adaptive_cooling_100[(block-1)*12:(block-1)*12+n,0] + occupancy_range[(block-1)*12:(block-1)*12+n,0]
 	comfort_range_heat = adaptive_heating_100[(block-1)*12:(block-1)*12+n,0] - occupancy_range[(block-1)*12:(block-1)*12+n,0]
@@ -173,12 +162,14 @@ if occupancy_mode == True:
 		b[2*k,0]=comfort_range_cool[k,0]-S[k,0]
 		b[2*k+1,0]=-comfort_range_heat[k,0]+S[k,0]
 		k=k+1
-else:
-	k = 0
-	while k<n:
-		b[2*k,0]=adaptiveCool[k,0]-S[k,0]
-		b[2*k+1,0]=-adaptiveHeat[k,0]+S[k,0]
-		k=k+1
+# else:
+# 	adaptiveHeat = adaptive_heating_setpoints[(block-1)*12:(block-1)*12+n,0]
+# 	adaptiveCool = adaptive_cooling_setpoints[(block-1)*12:(block-1)*12+n,0]
+# 	k = 0
+# 	while k<n:
+# 		b[2*k,0]=adaptiveCool[k,0]-S[k,0]
+# 		b[2*k+1,0]=-adaptiveHeat[k,0]+S[k,0]
+# 		k=k+1
 
 # time to solve for energy at each timestep
 #print(cc)
@@ -186,62 +177,14 @@ else:
 #print(b)
 ineq = (AA*x <= b)
 if heatorcool == 'heat':
-	lp2 = op(dot(cc,x),ineq)
+	lp2 = op(dot(cc,x),ineq)   # we want to optimize cost times energy within ineq constraints
 	op.addconstraint(lp2, heatineq)
 	op.addconstraint(lp2,heatlimiteq)
 if heatorcool == 'cool':
 	lp2 = op(dot(-cc,x),ineq)
 	op.addconstraint(lp2, coolineq)
 lp2.solve()
-
-if x.value == None:
-	energy = matrix(0.00, (13,1))
-	print('energy consumption')
-	j=0
-	while j<13:
-		print(energy[j])
-		j = j+1
-	j=0
-	temp_indoor = matrix(0.0, (totaltimesteps,1))
-	while j<13:
-		temp_indoor[j]=adaptiveHeat[j,0]
-		j=j+1
-	print('indoor temp prediction')
-	j = 0
-	while j<13:
-		print(temp_indoor[j,0])
-		j = j+1
-
-	print('pricing per timestep')
-	j = 0
-	while j<13:
-		print(cc[j,0])
-		j = j+1
-
-	print('outdoor temp')
-	j = 0
-	while j<13:
-		print(temp_outdoor[j,0])
-		j = j+1
-	print('solar radiation')
-	j = 0
-	while j<13:
-		print(q_solar[j,0])
-		j = j+1
-	print('adaptive heating setpoints')
-	j = 0
-	while j<12:
-		print(adaptiveHeat[j,0])
-		j=j+1
-	print('adaptive cooling setpoints')
-	j = 0
-	while j<12:
-		print(adaptiveCool[j,0])
-		j=j+1
-	quit()
-
 energy = x.value
-
 # print(lp2.objective.value())
 temp_indoor = matrix(0.0, (n,1))
 temp_indoor[0,0] = temp_indoor_initial
@@ -249,6 +192,7 @@ p = 1
 while p<n:
 	temp_indoor[p,0] = timestep*(c1*(temp_outdoor[p-1,0]-temp_indoor[p-1,0])+c2*energy[p-1,0]+c3*q_solar[p-1,0])+temp_indoor[p-1,0]
 	p = p+1
+# Output not used
 # Output[(block-1)*12:(block-1)*12+n,0] = energy[0:n,0] #0:12
 # Output[(block-1)*12:(block-1)*12+n,1] = temp_indoor[0:n,0] #0:12
 cost = cost + lp2.objective.value()	
@@ -295,16 +239,6 @@ j = 0
 while j<13:
 	print(q_solar[j,0])
 	j = j+1
-print('adaptive heating setpoints')
-j = 0
-while j<12:
-	print(adaptiveHeat[j,0])
-	j=j+1
-print('adaptive cooling setpoints')
-j = 0
-while j<12:
-	print(adaptiveCool[j,0])
-	j=j+1
 
 # print(Output)
 # with pd.ExcelWriter('OutdoorTemp.xlsx', mode ='a') as writer:
