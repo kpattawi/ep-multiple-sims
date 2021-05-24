@@ -154,20 +154,22 @@ while i<n:
 # b matrix is constant term in constaint equations
 b = matrix(0.0, (n*2,1))
 
-adaptiveHeat = adaptive_heating_setpoints[(block-1)*12:(block-1)*12+n,0]
-adaptiveCool = adaptive_cooling_setpoints[(block-1)*12:(block-1)*12+n,0]
-
 if occupancy_mode == True:
 	comfort_range_cool = adaptive_cooling_100[(block-1)*12:(block-1)*12+n,0] + occupancy_range[(block-1)*12:(block-1)*12+n,0]
 	comfort_range_heat = adaptive_heating_100[(block-1)*12:(block-1)*12+n,0] - occupancy_range[(block-1)*12:(block-1)*12+n,0]
+	print('OCCUPANCY MODE ON')
 	k = 0
 	while k<n:
 		b[2*k,0]=comfort_range_cool[k,0]-S[k,0]
 		b[2*k+1,0]=-comfort_range_heat[k,0]+S[k,0]
 		k=k+1
 else:
-	b[2*k,0]=adaptiveCool[k,0]-S[k,0]
-	b[2*k+1,0]=-adaptiveHeat[k,0]+S[k,0]
+	adaptiveHeat = adaptive_heating_setpoints[(block-1)*12:(block-1)*12+n,0]
+	adaptiveCool = adaptive_cooling_setpoints[(block-1)*12:(block-1)*12+n,0]
+	while k<n:
+		b[2*k,0]=adaptiveCool[k,0]-S[k,0]
+		b[2*k+1,0]=-adaptiveHeat[k,0]+S[k,0]
+		k=k+1
 
 # time to solve for energy at each timestep
 #print(cc)

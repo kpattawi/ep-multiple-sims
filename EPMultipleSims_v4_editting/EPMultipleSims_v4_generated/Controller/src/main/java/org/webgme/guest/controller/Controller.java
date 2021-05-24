@@ -409,6 +409,7 @@ public class Controller extends ControllerBase {
                 fuzzy_heat = -1;
             }
             heatTemps[i] = heatTemps[i] + 0.6 +fuzzy_heat*OFFSET;  // +0.6 so that oscillates 0.1-1.1 degree above heating setpoint
+          }
           //-------------------------------------------------------------------------------------------------
 
 
@@ -462,10 +463,6 @@ public class Controller extends ControllerBase {
           }
 
           System.out.println("timestep after sending Socket... should advance after this: "+ currentTime);
-
-
-          
-
 
           ////////////////////////////////////////////////////////////////////
           // TODO break here if ready to resign and break out of while loop //
