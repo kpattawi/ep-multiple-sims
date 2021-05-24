@@ -40,7 +40,7 @@ temp_indoor_initial = float(sys.argv[3])
 
 # Get data from excel/csv files --------------------------------------------
 # Get outdoor temps
-df = pd.read_excel('OutdoorTemp.xlsx', sheet_name='Feb12thru19',header=0)
+df = pd.read_excel('OutdoorTemp.xlsx', sheet_name='Jan1',header=0)
 # print(df.head())
 temp_outdoor_all=matrix(df.to_numpy())
 df.columns = ['column1']
@@ -84,11 +84,11 @@ occupancy = matrix(occupancy_df['Occupancy'].to_numpy())
 occupancy_range = matrix(occupancy_df['Comfort Range'].to_numpy())
 
 # get solar radiation
-df = pd.read_excel('Solar.xlsx', sheet_name='Feb12thru19')
+df = pd.read_excel('Solar.xlsx', sheet_name='Jan1')
 q_solar_all=matrix(df.to_numpy())
 
 # get wholesale prices
-df = pd.read_excel('WholesalePrice.xlsx', sheet_name='Feb12thru19')
+df = pd.read_excel('WholesalePrice.xlsx', sheet_name='Jan1thru7')
 wholesaleprice_all=matrix(df.to_numpy())
 
 # c matrix is hourly cost per kWh of energy (I think this can be deleted)
