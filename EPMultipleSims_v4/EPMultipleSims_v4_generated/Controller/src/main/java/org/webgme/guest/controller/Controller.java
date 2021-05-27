@@ -36,8 +36,8 @@ public class Controller extends ControllerBase {
 
     boolean adaptiveSetpoint_mode = true;
 
-    double fuzzy_heat = 0;  // NEEDS TO BE GLOBAL VAR outside of while loop
-    double fuzzy_cool = 0;  // NEEDS TO BE GLOBAL VAR outside of while loop
+    double fuzzy_heat = 1;  // NEEDS TO BE GLOBAL VAR outside of while loop
+    double fuzzy_cool = 1;  // NEEDS TO BE GLOBAL VAR outside of while loop
 
     int numSockets = 1;  // Change this
     String[] varNames = new String[15];   // add more empty vals if sending more vars
